@@ -131,4 +131,12 @@ class SiswaController extends Controller
 
         return view('admin.siswa.qrcode', compact('siswa', 'encryptedPayload', 'qrCodeSvg'));
     }
+
+    /**
+     * Cetak Kartu ID CR80 Siswa dari Admin (Standar Internasional 85.6mm x 54mm).
+     */
+    public function cetakKartu(Siswa $siswa)
+    {
+        return view('siswa.cetak-kartu', compact('siswa'));
+    }
 }

@@ -57,6 +57,22 @@ class Siswa extends Authenticatable
     }
 
     // ============================================================
+    // ACCESSOR: Kriptografi QR Code
+    // ============================================================
+
+    /**
+     * Accessor untuk payload QR Code terenkripsi (AES-128-CBC) tipe 'card' (permanen).
+     * Dapat diakses langsung melalui: $siswa->encrypted_qr_data
+     *
+     * Digunakan pada pencetakan kartu fisik ID Card CR80:
+     * {!! QrCode::size(120)->margin(0)->generate($siswa->encrypted_qr_data) !!}
+     */
+    public function getEncryptedQrDataAttribute(): string
+    {
+        return \App\Services\QrCryptoService::generateSiswaQrPayload($this, 'card');
+    }
+
+    // ============================================================
     // RELASI: Hubungan antar tabel
     // ============================================================
 

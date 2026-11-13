@@ -21,10 +21,8 @@ use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 Route::middleware('guest')->group(function () {
     // Halaman utama & portal login (3 kartu role)
     Route::get('/', [LoginController::class, 'portal']);
-    Route::get('/login', [LoginController::class, 'portal'])->name('login');
-
-    // Portal pemilihan role
-    Route::get('/login/portal', [LoginController::class, 'portal'])->name('login.portal');
+    Route::get('/login', [LoginController::class, 'portal'])->name('login.portal');
+    Route::get('/login/portal', [LoginController::class, 'portal'])->name('login');
 
     // Form login spesifik per role
     Route::get('/login/admin', [LoginController::class, 'showAdminLogin'])->name('login.admin');
@@ -61,6 +59,7 @@ Route::middleware(['auth:web', 'role:admin'])->prefix('admin')->name('admin.')->
 
     // 2. CRUD Data Siswa & Cetak QR
     Route::get('/siswa/{siswa}/qrcode', [AdminSiswaController::class, 'qrcode'])->name('siswa.qrcode');
+    Route::get('/siswa/{siswa}/cetak-kartu', [AdminSiswaController::class, 'cetakKartu'])->name('siswa.cetak-kartu');
     Route::resource('siswa', AdminSiswaController::class);
 
     // 3. CRUD Data Guru
@@ -97,8 +96,9 @@ Route::middleware(['auth:web', 'role:guru'])->prefix('guru')->name('guru.')->gro
 // HALAMAN SISWA (Guard: siswa)
 // ============================================================
 Route::middleware('auth:siswa')->prefix('siswa')->name('siswa.')->group(function () {
-    // 1. Portal Utama Siswa
+    // 1. Portal Utama Siswa (support alias dashboard & portal)
     Route::get('/portal', [SiswaDashboardController::class, 'index'])->name('portal');
+    Route::get('/dashboard', [SiswaDashboardController::class, 'index'])->name('dashboard');
 
     // 2. Kartu QR Code Presensi (Terenkripsi AES-128-CBC)
     Route::get('/qrcode', [SiswaDashboardController::class, 'showQrCode'])->name('qrcode');
