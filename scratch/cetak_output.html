@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartu ID Presensi Siswa — AHMAD REZKY — PRESIS SMKN 3 Bengkalis</title>
+
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50:  '#EBF5FB',
+                            100: '#D6ECF8',
+                            200: '#A2CBD9',
+                            300: '#76B3D1',
+                            400: '#3D91BD',
+                            500: '#046EA7',
+                            600: '#035D8D',
+                            700: '#024B72',
+                            800: '#023A58',
+                            900: '#012C43',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* ============================================================
+         * DIMENSI KARTU ID CR80 PORTRAIT (54mm × 85.6mm)
+         * ============================================================ */
+        .card-face {
+            width: 54mm;
+            height: 85.6mm;
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
+         * ATURAN CETAK DUPLEX / TIMBAL BALIK (PRINT)
+         * ============================================================ */
+        @page {
+            size: 54mm 85.6mm portrait;
+            margin: 0;
+        }
+
+        @media print {
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .cards-container {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                gap: 0 !important;
+                transform: none !important;
+            }
+
+            .card-holder-wrap {
+                padding: 0 !important;
+                margin: 0 !important;
+                background: none !important;
+                border: none !important;
+                box-shadow: none !important;
+                transform: none !important;
+            }
+
+            .card-face {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                width: 54mm !important;
+                height: 85.6mm !important;
+                page-break-after: always !important;
+                break-after: page !important;
+            }
+
+            .card-face:last-child {
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
+        }
+
+        /* ============================================================
+         * MOCKUP HOLDER LANYARD (TAMPILAN SCREEN LAYAR)
+         * ============================================================ */
+        @media screen {
+            .lanyard-strap {
+                width: 20mm;
+                height: 38mm;
+                background: repeating-linear-gradient(45deg, #1d4ed8, #1d4ed8 4px, #2563eb 4px, #2563eb 8px);
+                margin: 0 auto;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                position: relative;
+                border-radius: 2px 2px 0 0;
+            }
+            .lanyard-buckle {
+                width: 16mm;
+                height: 8mm;
+                background: #111827;
+                border-radius: 3px;
+                margin: -2mm auto 0 auto;
+                position: relative;
+                z-index: 30;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            }
+            .lanyard-clip {
+                width: 10mm;
+                height: 12mm;
+                background: #374151;
+                border-radius: 2px;
+                margin: -1mm auto 0 auto;
+                position: relative;
+                z-index: 25;
+            }
+            .card-holder-wrap {
+                background: rgba(255, 255, 255, 0.7);
+                border: 3px solid rgba(14, 165, 233, 0.45);
+                border-radius: 14px;
+                padding: 7px 7px 9px 7px;
+                box-shadow: 0 20px 40px -15px rgba(2, 58, 88, 0.3), 0 0 0 1px rgba(14, 165, 233, 0.2);
+                backdrop-filter: blur(8px);
+                position: relative;
+                margin-top: -3mm;
+                z-index: 20;
+            }
+            .holder-top-bar {
+                width: 100%;
+                height: 6mm;
+                background: #0284c7;
+                border-radius: 8px 8px 3px 3px;
+                margin-bottom: 2mm;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .holder-top-slot {
+                width: 14mm;
+                height: 2.2mm;
+                background: #082f49;
+                border-radius: 2mm;
+            }
+            .card-face {
+                border-radius: 6px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+        }
+
+        /* Kontainer QR Code Sisi Belakang */
+        .qr-box-back {
+            width: 33mm;
+            height: 33mm;
+        }
+        .qr-box-back svg {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 print:p-0 print:bg-white antialiased">
+
+    
+    <div class="no-print mb-6 text-center max-w-2xl w-full">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-800 mb-2 border border-sky-200">
+            <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
+            Format Resmi: CR80 Portrait Timbal Balik (54mm × 85.6mm)
+        </div>
+        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Cetak Kartu ID Presensi Siswa</h1>
+        <p class="text-xs text-slate-500 mt-0.5 mb-4">
+            Standar Cetak Kartu PVC / Kertas Foto Timbal Balik (Sisi Depan: Identitas & Foto · Sisi Belakang: QR Presensi AES-128)
+        </p>
+
+        
+        <div class="flex flex-wrap items-center justify-center gap-2.5">
+            <button onclick="window.print()"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 text-white shadow-md shadow-brand-600/30 transition-all active:scale-[0.98]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                </svg>
+                <span>Cetak 2 Sisi (Ctrl+P)</span>
+            </button>
+
+            
+            <div class="inline-flex items-center bg-white border border-slate-200 rounded-xl p-1 text-xs font-semibold text-slate-600 shadow-sm">
+                <span class="px-2 text-[11px] text-slate-400">Zoom:</span>
+                <button onclick="setZoom(1)" class="px-2.5 py-1 rounded-lg hover:bg-slate-100" id="zoom1">1x</button>
+                <button onclick="setZoom(1.15)" class="px-2.5 py-1 rounded-lg bg-slate-100 font-bold text-brand-600" id="zoom115">1.15x</button>
+                <button onclick="setZoom(1.35)" class="px-2.5 py-1 rounded-lg hover:bg-slate-100" id="zoom135">1.35x</button>
+            </div>
+
+            <a href="javascript:history.back()"
+               class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-sm">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span>Kembali</span>
+            </a>
+        </div>
+    </div>
+
+    
+    <div id="cardsScaleWrapper" class="cards-container flex flex-col md:flex-row items-center justify-center gap-8 print:block transition-transform origin-top" style="transform: scale(1.15);">
+
+        
+        <div class="flex flex-col items-center">
+            
+            <span class="no-print text-xs font-bold text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-brand-500 shadow-sm"></span>
+                SISI DEPAN (FRONT)
+            </span>
+
+            
+            <div class="no-print flex flex-col items-center">
+                <div class="lanyard-strap"></div>
+                <div class="lanyard-buckle"></div>
+                <div class="lanyard-clip"></div>
+            </div>
+
+            <div class="card-holder-wrap">
+                <div class="no-print holder-top-bar">
+                    <div class="holder-top-slot"></div>
+                </div>
+
+                
+                <div class="card-face flex flex-col justify-between">
+
+                    
+                    <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 54 85.6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- SISI KIRI: Poligon Diagonal Bertingkat Biru -->
+                        <!-- Layer 1 (Dark Navy) -->
+                        <polygon points="0,17 9,25 0,33" fill="#023A58" opacity="0.95" />
+                        <!-- Layer 2 (Primary Blue) -->
+                        <polygon points="0,31 10,41 0,51" fill="#046EA7" opacity="0.95" />
+                        <!-- Layer 3 (Medium Blue) -->
+                        <polygon points="0,49 9,58 0,67" fill="#0284c7" opacity="0.90" />
+                        <!-- Layer 4 (Soft Cyan) -->
+                        <polygon points="0,65 6,71 0,77" fill="#7dd3fc" opacity="0.80" />
+
+                        <!-- SISI KANAN: Poligon Diagonal Bertingkat Simetris -->
+                        <!-- Layer 1 (Dark Navy) -->
+                        <polygon points="54,17 45,25 54,33" fill="#023A58" opacity="0.95" />
+                        <!-- Layer 2 (Primary Blue) -->
+                        <polygon points="54,31 44,41 54,51" fill="#046EA7" opacity="0.95" />
+                        <!-- Layer 3 (Medium Blue) -->
+                        <polygon points="54,49 45,58 54,67" fill="#0284c7" opacity="0.90" />
+                        <!-- Layer 4 (Soft Cyan) -->
+                        <polygon points="54,65 48,71 54,77" fill="#7dd3fc" opacity="0.80" />
+                    </svg>
+
+                    
+                    <div class="relative z-10 pt-[3.8mm] px-[3mm] text-center">
+                        <div class="flex items-center justify-center gap-[1.6mm] mb-[0.8mm]">
+                            <div class="w-[7.5mm] h-[7.5mm] rounded-full overflow-hidden flex-shrink-0 bg-white shadow-xs ring-[0.4mm] ring-brand-500/40 flex items-center justify-center">
+                                <img src="http://localhost/images/logo-smkn3.jpg" alt="Logo SMKN 3" class="w-full h-full object-cover">
+                            </div>
+                            <div class="text-left">
+                                <h2 class="text-slate-900 font-black leading-none tracking-tight uppercase" style="font-size: 5.6pt;">
+                                    SMK NEGERI 3 BENGKALIS
+                                </h2>
+                                <p class="text-brand-600 font-extrabold leading-tight tracking-wider uppercase" style="font-size: 3.8pt; margin-top: 0.5mm;">
+                                    KARTU PRESENSI DIGITAL SISWA
+                                </p>
+                            </div>
+                        </div>
+                        <div class="h-[0.35mm] w-[36mm] mx-auto bg-gradient-to-r from-transparent via-brand-500 to-transparent"></div>
+                    </div>
+
+                    
+                    <div class="relative z-10 flex flex-col items-center mt-[1.8mm]">
+                        <div class="w-[22.5mm] h-[22.5mm] rounded-[3.8mm] bg-gradient-to-b from-sky-50 to-sky-100 border-[0.75mm] border-[#0284c7] shadow-sm flex items-center justify-center overflow-hidden">
+                            
+                            <svg class="w-[20mm] h-[20mm]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="48" fill="#EBF5FB"/>
+                                <path d="M28 36C28 22 38 15 50 15C62 15 72 22 72 36C72 40 70 42 70 42C67 36 62 34 50 34C38 34 33 36 30 42C30 42 28 40 28 36Z" fill="#1E293B"/>
+                                <path d="M32 38C32 38 32 58 50 58C68 58 68 38 68 38C68 38 62 38 50 38C38 38 32 38 32 38Z" fill="#FAD7A0"/>
+                                <circle cx="31" cy="45" r="3.5" fill="#FAD7A0"/>
+                                <circle cx="69" cy="45" r="3.5" fill="#FAD7A0"/>
+                                <rect x="36" y="40" width="11" height="8" rx="2" stroke="#0F172A" stroke-width="2.2" fill="none"/>
+                                <rect x="53" y="40" width="11" height="8" rx="2" stroke="#0F172A" stroke-width="2.2" fill="none"/>
+                                <line x1="47" y1="44" x2="53" y2="44" stroke="#0F172A" stroke-width="2"/>
+                                <path d="M42 51C44 54 47 55 50 55C53 55 56 54 58 51" stroke="#1E293B" stroke-width="1.8" stroke-linecap="round"/>
+                                <path d="M38 48C38 57 44 63 50 63C56 63 62 57 62 48C62 48 58 58 50 58C42 58 38 48 38 48Z" fill="#1E293B"/>
+                                <rect x="45" y="58" width="10" height="9" fill="#F5B7B1"/>
+                                <path d="M22 88C22 72 34 67 44 66L46 75L50 78L54 75L56 66C66 67 78 72 78 88H22Z" fill="#046EA7"/>
+                                <polygon points="46,66 54,66 52,78 48,78" fill="#FFFFFF"/>
+                                <polygon points="49,67 51,67 52,80 50,83 48,80" fill="#023A58"/>
+                            </svg>
+                        </div>
+
+                        
+                        <div class="text-center mt-[1.8mm] px-[3mm] w-full">
+                            <h3 class="text-slate-900 font-black leading-tight tracking-tight uppercase truncate" style="font-size: 7.2pt;">
+                                AHMAD REZKY
+                            </h3>
+                            <p class="text-brand-600 font-extrabold tracking-wider uppercase leading-none" style="font-size: 4.6pt; margin-top: 0.5mm;">
+                                SISWA &bull; XI TKJ 1
+                            </p>
+                        </div>
+                    </div>
+
+                    
+                    <div class="relative z-10 px-[5.5mm] my-[1.8mm]">
+                        <div class="bg-white/95 p-[2.2mm] rounded-[2mm] border-[0.3mm] border-slate-200/90 shadow-2xs">
+                            <table class="w-full text-left" style="font-size: 5pt; line-height: 1.55;">
+                                <tbody>
+                                    <tr>
+                                        <td class="font-bold text-slate-500 whitespace-nowrap" style="width: 14mm;">ID No</td>
+                                        <td class="font-bold text-slate-400 px-[0.6mm]" style="width: 1.5mm;">:</td>
+                                        <td class="font-bold font-mono text-slate-900 truncate">0109401780</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold text-slate-500 whitespace-nowrap">Kelas</td>
+                                        <td class="font-bold text-slate-400 px-[0.6mm]">:</td>
+                                        <td class="font-extrabold text-brand-700 truncate">XI TKJ 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold text-slate-500 whitespace-nowrap">Jurusan</td>
+                                        <td class="font-bold text-slate-400 px-[0.6mm]">:</td>
+                                        <td class="font-bold text-slate-800 truncate">Teknik Komputer & Jaringan ( TKJ )</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+                    <div class="relative z-10 bg-[#023A58] text-center flex items-center justify-center" style="height: 6.5mm;">
+                        <p class="text-sky-200 font-extrabold tracking-wider leading-none" style="font-size: 3.8pt; letter-spacing: 0.05em;">
+                            SMK NEGERI 3 BENGKALIS &bull; TP 2026/2027
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        
+        <div class="flex flex-col items-center">
+            
+            <span class="no-print text-xs font-bold text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm"></span>
+                SISI BELAKANG (BACK)
+            </span>
+
+            
+            <div class="no-print flex flex-col items-center">
+                <div class="lanyard-strap"></div>
+                <div class="lanyard-buckle"></div>
+                <div class="lanyard-clip"></div>
+            </div>
+
+            <div class="card-holder-wrap">
+                <div class="no-print holder-top-bar">
+                    <div class="holder-top-slot"></div>
+                </div>
+
+                
+                <div class="card-face flex flex-col justify-between">
+
+                    
+                    <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 54 85.6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="0,17 9,25 0,33" fill="#023A58" opacity="0.95" />
+                        <polygon points="0,31 10,41 0,51" fill="#046EA7" opacity="0.95" />
+                        <polygon points="0,49 9,58 0,67" fill="#0284c7" opacity="0.90" />
+                        <polygon points="0,65 6,71 0,77" fill="#7dd3fc" opacity="0.80" />
+
+                        <polygon points="54,17 45,25 54,33" fill="#023A58" opacity="0.95" />
+                        <polygon points="54,31 44,41 54,51" fill="#046EA7" opacity="0.95" />
+                        <polygon points="54,49 45,58 54,67" fill="#0284c7" opacity="0.90" />
+                        <polygon points="54,65 48,71 54,77" fill="#7dd3fc" opacity="0.80" />
+                    </svg>
+
+                    
+                    <div class="relative z-10 pt-[3.8mm] px-[3mm] text-center">
+                        <h4 class="text-slate-900 font-black leading-none tracking-tight uppercase" style="font-size: 5.6pt;">
+                            PRESENSI DIGITAL (PRESIS)
+                        </h4>
+                        <p class="text-brand-600 font-extrabold leading-tight tracking-wider uppercase" style="font-size: 3.8pt; margin-top: 0.5mm;">
+                            SMK NEGERI 3 BENGKALIS
+                        </p>
+                        <div class="h-[0.35mm] w-[36mm] mx-auto mt-[1mm] bg-gradient-to-r from-transparent via-brand-500 to-transparent"></div>
+                    </div>
+
+                    
+                    <div class="relative z-10 flex flex-col items-center mt-[1.2mm]">
+                        <div class="qr-box-back p-[1.2mm] bg-white rounded-[2.8mm] border-[0.6mm] border-[#0284c7] shadow-sm flex items-center justify-center">
+                            <?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="140" height="140" viewBox="0 0 140 140"><rect x="0" y="0" width="140" height="140" fill="#ffffff"/><g transform="scale(2.857)"><g transform="translate(0,0)"><path fill-rule="evenodd" d="M8 0L8 1L9 1L9 2L8 2L8 5L9 5L9 4L12 4L12 3L13 3L13 6L12 6L12 5L10 5L10 8L11 8L11 10L13 10L13 11L14 11L14 12L13 12L13 16L14 16L14 17L13 17L13 18L12 18L12 17L11 17L11 16L9 16L9 15L10 15L10 14L11 14L11 13L12 13L12 11L11 11L11 13L7 13L7 12L6 12L6 11L8 11L8 10L10 10L10 9L9 9L9 8L8 8L8 10L6 10L6 9L7 9L7 8L6 8L6 9L5 9L5 10L1 10L1 9L4 9L4 8L0 8L0 11L1 11L1 12L2 12L2 13L0 13L0 14L2 14L2 15L0 15L0 16L2 16L2 17L1 17L1 19L0 19L0 20L1 20L1 19L2 19L2 20L3 20L3 21L4 21L4 24L3 24L3 26L2 26L2 27L3 27L3 28L4 28L4 29L0 29L0 35L1 35L1 33L2 33L2 35L3 35L3 36L1 36L1 40L0 40L0 41L3 41L3 40L4 40L4 39L2 39L2 38L4 38L4 37L3 37L3 36L6 36L6 37L5 37L5 39L9 39L9 40L6 40L6 41L8 41L8 42L10 42L10 41L11 41L11 42L12 42L12 41L13 41L13 42L14 42L14 41L15 41L15 42L18 42L18 43L19 43L19 46L15 46L15 45L13 45L13 44L14 44L14 43L11 43L11 44L12 44L12 45L10 45L10 43L9 43L9 45L8 45L8 49L9 49L9 45L10 45L10 48L11 48L11 47L13 47L13 49L14 49L14 47L17 47L17 48L15 48L15 49L21 49L21 48L18 48L18 47L22 47L22 46L24 46L24 45L26 45L26 47L27 47L27 48L29 48L29 46L32 46L32 47L33 47L33 46L32 46L32 45L31 45L31 44L32 44L32 43L33 43L33 42L35 42L35 43L34 43L34 45L35 45L35 46L38 46L38 47L36 47L36 48L35 48L35 47L34 47L34 48L33 48L33 49L38 49L38 48L39 48L39 49L40 49L40 48L39 48L39 47L40 47L40 45L44 45L44 46L43 46L43 48L44 48L44 49L45 49L45 47L46 47L46 49L49 49L49 48L47 48L47 46L45 46L45 44L46 44L46 45L48 45L48 47L49 47L49 45L48 45L48 44L46 44L46 42L47 42L47 43L49 43L49 41L48 41L48 40L49 40L49 39L48 39L48 38L49 38L49 37L46 37L46 38L45 38L45 36L47 36L47 35L46 35L46 34L49 34L49 29L48 29L48 28L49 28L49 27L48 27L48 25L49 25L49 23L47 23L47 22L49 22L49 17L48 17L48 18L46 18L46 17L47 17L47 16L48 16L48 15L47 15L47 16L46 16L46 17L45 17L45 16L43 16L43 19L42 19L42 17L40 17L40 16L42 16L42 15L41 15L41 14L40 14L40 13L41 13L41 11L43 11L43 13L44 13L44 12L45 12L45 15L46 15L46 12L49 12L49 11L47 11L47 10L48 10L48 9L49 9L49 8L48 8L48 9L47 9L47 8L44 8L44 9L42 9L42 8L41 8L41 11L40 11L40 12L39 12L39 13L37 13L37 12L38 12L38 11L39 11L39 10L38 10L38 9L37 9L37 10L35 10L35 12L34 12L34 10L33 10L33 9L36 9L36 7L37 7L37 6L36 6L36 5L38 5L38 8L40 8L40 7L41 7L41 6L40 6L40 7L39 7L39 5L38 5L38 4L37 4L37 3L38 3L38 2L39 2L39 4L40 4L40 3L41 3L41 0L40 0L40 1L38 1L38 0L37 0L37 1L38 1L38 2L36 2L36 5L34 5L34 4L35 4L35 3L34 3L34 4L33 4L33 5L34 5L34 8L33 8L33 9L32 9L32 10L31 10L31 9L30 9L30 7L31 7L31 6L32 6L32 7L33 7L33 6L32 6L32 3L33 3L33 2L35 2L35 1L34 1L34 0L28 0L28 1L31 1L31 2L30 2L30 3L29 3L29 2L28 2L28 3L29 3L29 4L31 4L31 5L29 5L29 6L28 6L28 7L29 7L29 8L27 8L27 1L26 1L26 0L25 0L25 1L26 1L26 4L25 4L25 2L23 2L23 1L18 1L18 0L17 0L17 5L18 5L18 7L17 7L17 6L16 6L16 4L14 4L14 3L15 3L15 1L9 1L9 0ZM10 2L10 3L11 3L11 2ZM18 2L18 3L19 3L19 2ZM20 2L20 3L21 3L21 2ZM18 4L18 5L19 5L19 4ZM21 4L21 7L22 7L22 4ZM14 5L14 6L13 6L13 7L12 7L12 6L11 6L11 7L12 7L12 8L13 8L13 9L15 9L15 10L18 10L18 9L19 9L19 8L20 8L20 6L19 6L19 7L18 7L18 9L16 9L16 8L15 8L15 7L16 7L16 6L15 6L15 5ZM23 5L23 8L26 8L26 5ZM8 6L8 7L9 7L9 6ZM14 6L14 7L13 7L13 8L14 8L14 7L15 7L15 6ZM24 6L24 7L25 7L25 6ZM29 6L29 7L30 7L30 6ZM35 6L35 7L36 7L36 6ZM21 8L21 9L20 9L20 10L23 10L23 9L22 9L22 8ZM26 9L26 10L24 10L24 11L25 11L25 13L24 13L24 12L23 12L23 14L22 14L22 13L21 13L21 14L22 14L22 15L20 15L20 14L19 14L19 13L20 13L20 12L22 12L22 11L20 11L20 12L19 12L19 13L15 13L15 12L14 12L14 13L15 13L15 14L14 14L14 16L15 16L15 18L13 18L13 19L12 19L12 20L11 20L11 19L9 19L9 21L10 21L10 22L9 22L9 24L10 24L10 25L9 25L9 29L8 29L8 28L7 28L7 27L5 27L5 29L4 29L4 31L5 31L5 29L6 29L6 30L9 30L9 29L12 29L12 31L11 31L11 30L10 30L10 32L12 32L12 33L15 33L15 34L13 34L13 35L12 35L12 34L11 34L11 35L10 35L10 34L9 34L9 31L6 31L6 32L7 32L7 33L5 33L5 35L6 35L6 36L7 36L7 35L6 35L6 34L7 34L7 33L8 33L8 35L10 35L10 36L9 36L9 37L8 37L8 38L9 38L9 39L10 39L10 38L11 38L11 39L13 39L13 37L12 37L12 36L14 36L14 37L15 37L15 36L16 36L16 39L15 39L15 38L14 38L14 40L15 40L15 41L18 41L18 42L19 42L19 43L21 43L21 44L20 44L20 46L22 46L22 45L21 45L21 44L22 44L22 42L21 42L21 41L20 41L20 40L21 40L21 39L22 39L22 40L23 40L23 39L24 39L24 38L25 38L25 39L26 39L26 40L27 40L27 39L29 39L29 38L30 38L30 39L31 39L31 40L34 40L34 41L35 41L35 42L36 42L36 45L37 45L37 44L38 44L38 46L39 46L39 45L40 45L40 42L39 42L39 41L40 41L40 40L39 40L39 39L38 39L38 37L37 37L37 40L36 40L36 38L35 38L35 37L34 37L34 36L32 36L32 37L34 37L34 38L35 38L35 40L34 40L34 39L31 39L31 36L30 36L30 33L33 33L33 35L34 35L34 34L35 34L35 36L37 36L37 35L38 35L38 36L40 36L40 37L39 37L39 38L41 38L41 36L43 36L43 35L45 35L45 34L46 34L46 33L47 33L47 31L46 31L46 30L45 30L45 29L46 29L46 28L47 28L47 26L46 26L46 25L45 25L45 26L46 26L46 27L45 27L45 29L44 29L44 27L42 27L42 28L43 28L43 31L42 31L42 32L39 32L39 33L38 33L38 34L37 34L37 32L38 32L38 31L39 31L39 29L41 29L41 30L40 30L40 31L41 31L41 30L42 30L42 29L41 29L41 27L39 27L39 26L40 26L40 25L39 25L39 26L38 26L38 27L39 27L39 29L37 29L37 28L36 28L36 26L35 26L35 25L34 25L34 24L33 24L33 21L34 21L34 22L35 22L35 21L34 21L34 20L32 20L32 19L30 19L30 18L31 18L31 17L32 17L32 18L33 18L33 19L34 19L34 18L33 18L33 17L35 17L35 19L36 19L36 18L38 18L38 19L37 19L37 20L36 20L36 21L38 21L38 22L36 22L36 24L39 24L39 23L40 23L40 22L42 22L42 21L39 21L39 20L41 20L41 19L39 19L39 17L38 17L38 14L37 14L37 13L34 13L34 14L33 14L33 12L32 12L32 11L30 11L30 12L28 12L28 11L29 11L29 10L28 10L28 11L27 11L27 12L26 12L26 10L27 10L27 9ZM44 9L44 11L46 11L46 10L47 10L47 9L46 9L46 10L45 10L45 9ZM5 10L5 11L3 11L3 13L2 13L2 14L4 14L4 19L3 19L3 18L2 18L2 19L3 19L3 20L4 20L4 21L5 21L5 20L8 20L8 19L5 19L5 16L7 16L7 17L6 17L6 18L7 18L7 17L8 17L8 16L7 16L7 15L9 15L9 14L7 14L7 13L5 13L5 11L6 11L6 10ZM9 11L9 12L10 12L10 11ZM16 11L16 12L18 12L18 11ZM36 11L36 12L37 12L37 11ZM30 12L30 13L31 13L31 12ZM4 13L4 14L5 14L5 13ZM25 13L25 14L24 14L24 15L23 15L23 16L22 16L22 17L21 17L21 18L22 18L22 19L23 19L23 18L24 18L24 15L26 15L26 17L25 17L25 19L24 19L24 20L23 20L23 21L22 21L22 20L19 20L19 22L20 22L20 24L18 24L18 20L16 20L16 18L18 18L18 19L20 19L20 16L19 16L19 15L17 15L17 14L15 14L15 16L16 16L16 18L15 18L15 19L13 19L13 20L12 20L12 22L13 22L13 23L14 23L14 24L13 24L13 25L12 25L12 24L11 24L11 25L10 25L10 26L11 26L11 25L12 25L12 28L14 28L14 29L13 29L13 30L15 30L15 31L14 31L14 32L17 32L17 34L16 34L16 36L17 36L17 37L18 37L18 38L17 38L17 39L18 39L18 40L19 40L19 39L18 39L18 38L21 38L21 37L22 37L22 38L23 38L23 37L27 37L27 38L28 38L28 33L29 33L29 31L30 31L30 29L31 29L31 30L32 30L32 31L31 31L31 32L32 32L32 31L34 31L34 32L35 32L35 33L36 33L36 32L37 32L37 31L38 31L38 30L37 30L37 29L33 29L33 28L32 28L32 26L34 26L34 27L35 27L35 26L34 26L34 25L32 25L32 23L31 23L31 22L32 22L32 21L31 21L31 20L29 20L29 19L28 19L28 18L26 18L26 17L28 17L28 15L29 15L29 16L30 16L30 17L29 17L29 18L30 18L30 17L31 17L31 16L32 16L32 17L33 17L33 16L37 16L37 15L36 15L36 14L34 14L34 15L33 15L33 14L30 14L30 15L29 15L29 13ZM48 13L48 14L49 14L49 13ZM6 14L6 15L7 15L7 14ZM27 14L27 15L28 15L28 14ZM30 15L30 16L31 16L31 15ZM18 16L18 17L19 17L19 16ZM10 17L10 18L11 18L11 17ZM22 17L22 18L23 18L23 17ZM44 18L44 22L45 22L45 23L46 23L46 22L47 22L47 19L46 19L46 18ZM26 19L26 20L24 20L24 21L23 21L23 22L24 22L24 21L26 21L26 22L27 22L27 25L28 25L28 26L27 26L27 28L28 28L28 31L29 31L29 29L30 29L30 28L29 28L29 27L28 27L28 26L29 26L29 24L31 24L31 23L30 23L30 22L28 22L28 21L26 21L26 20L27 20L27 19ZM38 19L38 20L39 20L39 19ZM10 20L10 21L11 21L11 20ZM13 20L13 21L15 21L15 22L14 22L14 23L17 23L17 21L15 21L15 20ZM6 21L6 22L8 22L8 21ZM20 21L20 22L21 22L21 21ZM0 22L0 25L1 25L1 22ZM2 22L2 23L3 23L3 22ZM38 22L38 23L39 23L39 22ZM5 23L5 26L8 26L8 23ZM23 23L23 26L26 26L26 23ZM41 23L41 26L44 26L44 23ZM6 24L6 25L7 25L7 24ZM14 24L14 26L18 26L18 27L19 27L19 26L20 26L20 25L19 25L19 26L18 26L18 24L17 24L17 25L16 25L16 24ZM24 24L24 25L25 25L25 24ZM42 24L42 25L43 25L43 24ZM47 24L47 25L48 25L48 24ZM30 25L30 26L32 26L32 25ZM0 26L0 27L1 27L1 26ZM3 26L3 27L4 27L4 26ZM21 26L21 27L22 27L22 26ZM10 27L10 28L11 28L11 27ZM14 27L14 28L16 28L16 27ZM23 27L23 28L21 28L21 29L20 29L20 28L17 28L17 29L18 29L18 30L17 30L17 32L18 32L18 34L19 34L19 30L20 30L20 31L21 31L21 32L20 32L20 34L21 34L21 33L24 33L24 32L23 32L23 31L24 31L24 30L26 30L26 31L25 31L25 32L26 32L26 34L27 34L27 29L25 29L25 27ZM6 28L6 29L7 29L7 28ZM23 28L23 29L22 29L22 30L21 30L21 31L23 31L23 30L24 30L24 28ZM32 29L32 30L33 30L33 29ZM1 30L1 32L3 32L3 30ZM35 30L35 31L37 31L37 30ZM44 30L44 32L42 32L42 33L39 33L39 35L40 35L40 34L44 34L44 32L46 32L46 31L45 31L45 30ZM12 31L12 32L13 32L13 31ZM3 33L3 34L4 34L4 33ZM11 35L11 36L10 36L10 37L9 37L9 38L10 38L10 37L11 37L11 38L12 38L12 37L11 37L11 36L12 36L12 35ZM14 35L14 36L15 36L15 35ZM17 35L17 36L18 36L18 35ZM19 35L19 37L20 37L20 36L22 36L22 37L23 37L23 36L25 36L25 35L23 35L23 36L22 36L22 35ZM26 35L26 36L27 36L27 35ZM48 35L48 36L49 36L49 35ZM6 37L6 38L7 38L7 37ZM42 38L42 39L41 39L41 40L42 40L42 39L44 39L44 40L45 40L45 38ZM46 39L46 40L48 40L48 39ZM9 40L9 41L10 41L10 40ZM11 40L11 41L12 41L12 40ZM28 40L28 41L29 41L29 40ZM37 40L37 41L36 41L36 42L37 42L37 43L38 43L38 42L37 42L37 41L39 41L39 40ZM23 41L23 44L26 44L26 41ZM30 41L30 42L27 42L27 43L29 43L29 45L28 45L28 46L27 46L27 47L28 47L28 46L29 46L29 45L30 45L30 44L31 44L31 43L32 43L32 42L33 42L33 41ZM41 41L41 44L44 44L44 41ZM45 41L45 42L46 42L46 41ZM47 41L47 42L48 42L48 41ZM24 42L24 43L25 43L25 42ZM42 42L42 43L43 43L43 42ZM16 43L16 45L18 45L18 44L17 44L17 43ZM23 47L23 49L26 49L26 48L25 48L25 47ZM30 47L30 48L31 48L31 49L32 49L32 48L31 48L31 47ZM41 47L41 49L42 49L42 47ZM0 0L0 7L7 7L7 0ZM1 1L1 6L6 6L6 1ZM2 2L2 5L5 5L5 2ZM42 0L42 7L49 7L49 0ZM43 1L43 6L48 6L48 1ZM44 2L44 5L47 5L47 2ZM0 42L0 49L7 49L7 42ZM1 43L1 48L6 48L6 43ZM2 44L2 47L5 47L5 44Z" fill="#000000"/></g></g></svg>
+
+                        </div>
+                        
+                        
+                        <div class="text-center mt-[1.2mm]">
+                            <span class="inline-flex items-center gap-[1mm] px-[2.2mm] py-[0.5mm] rounded-full bg-brand-50 border border-brand-200 text-brand-700 font-bold uppercase tracking-wider" style="font-size: 3.6pt;">
+                                <span class="w-[1.2mm] h-[1.2mm] rounded-full bg-emerald-500 animate-pulse"></span>
+                                ID: <span class="font-mono">0109401780</span> &bull; ENCRYPTED AES-128
+                            </span>
+                            <p class="font-extrabold text-slate-400 uppercase tracking-widest leading-none" style="font-size: 3.4pt; margin-top: 0.8mm;">
+                                ARAHKAN KODE KE KAMERA SCANNER GURU
+                            </p>
+                        </div>
+                    </div>
+
+                    
+                    <div class="relative z-10 px-[5.5mm] my-[1mm]">
+                        <div class="bg-slate-50/95 p-[1.8mm] rounded-[2mm] border-[0.3mm] border-slate-200 text-slate-600" style="font-size: 3.6pt; line-height: 1.35;">
+                            <p class="font-extrabold text-slate-800 uppercase tracking-wide mb-[0.5mm]">Ketentuan Kartu Presensi:</p>
+                            <ol class="list-decimal list-inside space-y-[0.3mm] text-slate-500">
+                                <li>Kartu wajib dibawa setiap hari sekolah aktif.</li>
+                                <li>Kode QR terenkripsi anti-titip absen & anti-duplikasi.</li>
+                                <li>Jika kartu hilang, segera lapor ke operator sekolah.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    
+                    <div class="relative z-10 bg-[#023A58] text-center flex items-center justify-center" style="height: 6.5mm;">
+                        <p class="text-sky-200 font-extrabold tracking-wider leading-none" style="font-size: 3.6pt; letter-spacing: 0.05em;">
+                            AES-128 ENCRYPTED ATTENDANCE SYSTEM &bull; PRESIS
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    
+    <div class="no-print mt-8 max-w-xl w-full">
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm text-xs text-slate-600">
+            <div class="flex items-center gap-2 mb-2.5 font-bold text-slate-900">
+                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Panduan Cetak ID Card Standar CR80 (Duplex / 2 Sisi):</span>
+            </div>
+            <ul class="space-y-1.5 text-[11px] list-disc list-inside text-slate-500">
+                <li>Kartu ini terdiri dari <strong>2 Sisi Halaman (Depan: Identitas & Foto · Belakang: QR Presensi AES-128)</strong>.</li>
+                <li><strong>Untuk Printer Kartu PVC Duplex</strong> (Fargo, Evolis, Zebra): Pilih opsi <em>"Print Both Sides / Duplex"</em> pada driver printer kartu. Sisi 1 akan otomatis dicetak di depan dan Sisi 2 di belakang kartu PVC.</li>
+                <li><strong>Untuk Kertas Foto / PVC Lembaran</strong>: Cetak Sisi 1, balik kertas, lalu cetak Sisi 2, atau cetak berdampingan dan rekatkan bolak-balik sebelum dimasukkan ke dalam badge holder mika / acrylic lanyard.</li>
+                <li>Pastikan orientasi disetel ke <strong>Portrait</strong>, margin <strong>None (0)</strong>, dan centang opsi <strong>"Background Graphics"</strong>.</li>
+            </ul>
+        </div>
+    </div>
+
+    
+    <script>
+        function setZoom(scale) {
+            const wrapper = document.getElementById('cardsScaleWrapper');
+            wrapper.style.transform = `scale(${scale})`;
+
+            ['zoom1', 'zoom115', 'zoom135'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.className = 'px-2.5 py-1 rounded-lg hover:bg-slate-100';
+            });
+            if (scale === 1) document.getElementById('zoom1').className = 'px-2.5 py-1 rounded-lg bg-slate-100 font-bold text-brand-600';
+            if (scale === 1.15) document.getElementById('zoom115').className = 'px-2.5 py-1 rounded-lg bg-slate-100 font-bold text-brand-600';
+            if (scale === 1.35) document.getElementById('zoom135').className = 'px-2.5 py-1 rounded-lg bg-slate-100 font-bold text-brand-600';
+        }
+    </script>
+
+</body>
+</html>

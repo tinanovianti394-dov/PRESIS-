@@ -13,7 +13,7 @@
     </x-slot:sidebar>
 
     <div class="max-w-xl mx-auto">
-        <div class="mb-5 flex items-center justify-between">
+        <div class="mb-5 flex items-center justify-between no-print">
             <a href="{{ route('admin.siswa.index') }}" class="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -33,83 +33,184 @@
                     <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                     </svg>
-                    <span>Print Halaman</span>
+                    <span>Print Cepat</span>
                 </button>
             </div>
         </div>
 
-        {{-- Kartu QR Desain Modern --}}
-        <div id="printArea" class="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-md relative overflow-hidden">
+        {{-- Kartu QR Desain Kompak --}}
+        <div id="printArea" class="bg-white rounded-3xl border border-slate-200/80 shadow-md relative overflow-hidden">
             <!-- Header Kartu -->
-            <div class="border-b border-slate-100 pb-4 mb-5 flex items-center justify-between">
+            <div class="print-header border-b border-slate-100 p-5 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo-smkn3.jpg') }}" alt="Logo SMKN 3 Bengkalis" class="w-11 h-11 rounded-xl object-cover ring-1 ring-slate-200 shadow-sm flex-shrink-0">
+                    <img src="{{ asset('images/logo-smkn3.jpg') }}" alt="Logo SMKN 3 Bengkalis" class="w-10 h-10 rounded-xl object-cover ring-1 ring-slate-200 shadow-sm flex-shrink-0">
                     <div>
-                        <h2 class="font-extrabold text-base tracking-tight text-slate-900 leading-tight">SMK NEGERI 3 BENGKALIS</h2>
-                        <p class="text-[10px] font-bold text-sky-600 uppercase tracking-wider">Kartu Presensi Digital (PRESIS)</p>
+                        <h2 class="font-extrabold text-sm tracking-tight text-slate-900 leading-tight">SMK NEGERI 3 BENGKALIS</h2>
+                        <p class="text-[9.5px] font-bold text-sky-600 uppercase tracking-wider">Kartu Presensi Digital (PRESIS)</p>
                     </div>
                 </div>
-                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200/60 uppercase">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9.5px] font-bold bg-sky-50 text-sky-700 border border-sky-200/60 uppercase">
                     <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span> AES-128
                 </span>
             </div>
 
             <!-- Konten Kartu QR & Identitas Siswa -->
-            <div class="flex flex-col sm:flex-row items-center gap-6">
-                <!-- QR Box -->
-                <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-center flex-shrink-0">
-                    <div class="p-2 bg-white rounded-xl shadow-sm border border-slate-200/60">
-                        {!! $qrCodeSvg !!}
-                    </div>
-                    <p class="text-[10px] font-mono font-bold text-slate-500 mt-2 tracking-wider uppercase">KODE PRESENSI SISWA</p>
-                </div>
-
-                <!-- Info Siswa -->
-                <div class="flex-1 w-full space-y-3 text-xs">
-                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Nama Lengkap Siswa</span>
-                        <p class="font-bold text-sm text-slate-900 mt-0.5">{{ $siswa->nama }}</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">NISN</span>
-                            <p class="font-mono font-bold text-sm text-slate-900 mt-0.5">{{ $siswa->nisn }}</p>
+            <div class="print-body p-5">
+                <div class="print-grid flex flex-col sm:flex-row items-center gap-5">
+                    <!-- QR Box -->
+                    <div class="print-qr-col p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-center flex-shrink-0">
+                        <div class="print-qr-inner p-2 bg-white rounded-xl shadow-sm border border-slate-200/60">
+                            {!! $qrCodeSvg !!}
                         </div>
-                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Kelas</span>
-                            <p class="font-bold text-sm text-slate-900 mt-0.5">{{ $siswa->kelas }}</p>
-                        </div>
+                        <p class="print-qr-label text-[9.5px] font-mono font-bold text-slate-500 mt-1.5 tracking-wider uppercase">SCANNER PRESENSI</p>
                     </div>
 
-                    <div class="p-3 rounded-xl bg-emerald-50/60 border border-emerald-200/60">
-                        <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">No. HP Orang Tua (WhatsApp)</span>
-                        <p class="font-mono font-bold text-emerald-950 mt-0.5">{{ $siswa->no_hp_orangtua ?? 'Belum Diatur' }}</p>
+                    <!-- Info Siswa -->
+                    <div class="print-info-col flex-1 w-full space-y-2.5 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/60">
+                            <span class="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider block">Nama Lengkap Siswa</span>
+                            <p class="font-bold text-sm text-slate-900 mt-0.5 leading-snug">{{ $siswa->nama }}</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/60">
+                                <span class="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider block">ID / NISN</span>
+                                <p class="font-mono font-bold text-sm text-slate-900 mt-0.5">{{ $siswa->nisn }}</p>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/60">
+                                <span class="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider block">Kelas</span>
+                                <p class="font-bold text-sm text-sky-700 mt-0.5">{{ $siswa->kelas }}</p>
+                            </div>
+                        </div>
+
+                        <div class="p-2.5 rounded-xl bg-sky-50/70 border border-sky-200/60 flex items-center justify-between gap-2">
+                            <div>
+                                <span class="text-[9.5px] font-bold text-sky-700 uppercase tracking-wider block">Jurusan / Program Keahlian</span>
+                                <p class="font-bold text-xs text-slate-900 mt-0.5">Teknik Komputer & Jaringan ( TKJ )</p>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-sky-100 text-sky-800 flex-shrink-0">TKJ</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Footer Kartu -->
-            <div class="mt-5 pt-3.5 border-t border-slate-100 text-[10px] text-slate-400 flex items-center justify-between font-mono">
-                <span>Enkripsi: OpenSSL AES-128-CBC + IV Acak</span>
-                <span>Dicetak: {{ now()->format('d/m/Y') }}</span>
+            <div class="print-footer px-5 py-2.5 bg-slate-50 border-t border-slate-100 text-[10px] text-slate-400 flex items-center justify-between font-mono">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    Enkripsi: AES-128-CBC + IV Acak
+                </span>
+                <span>SMKN 3 BENGKALIS</span>
             </div>
         </div>
     </div>
 
     @push('styles')
     <style>
+        @page {
+            size: portrait;
+            margin: 10mm;
+        }
+
         @media print {
-            body * { visibility: hidden; }
-            #printArea, #printArea * { visibility: visible; }
+            /* Reset background & layout dashboard */
+            html, body {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: auto !important;
+                min-height: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Sembunyikan elemen dashboard & non-cetak */
+            aside, header, footer, #sidebar, #sidebarOverlay,
+            .no-print, nav, [role="navigation"] {
+                display: none !important;
+            }
+
+            .lg\:ml-64 {
+                margin-left: 0 !important;
+            }
+            main {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            .max-w-xl {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Kartu Cetak: Kompak, 1 Halaman */
             #printArea {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                width: 90%;
+                position: relative !important;
+                margin: 15px auto 0 auto !important;
+                width: 100% !important;
+                max-width: 440px !important;
                 box-shadow: none !important;
-                border: 1px solid #cbd5e1 !important;
+                border: 1.5px solid #0284c7 !important;
+                border-radius: 16px !important;
+                overflow: hidden !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            /* Header Kartu Cetak */
+            #printArea .print-header {
+                padding: 10px 14px !important;
+            }
+
+            /* Body Kartu Cetak */
+            #printArea .print-body {
+                padding: 12px 14px !important;
+            }
+            #printArea .print-grid {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 12px !important;
+            }
+
+            /* Ukuran QR Code Cetak */
+            #printArea .print-qr-col {
+                width: 125px !important;
+                max-width: 125px !important;
+                flex-shrink: 0 !important;
+                padding: 7px !important;
+            }
+            #printArea .print-qr-inner {
+                padding: 5px !important;
+            }
+            #printArea .print-qr-inner svg {
+                width: 100px !important;
+                height: 100px !important;
+                display: block !important;
+                margin: 0 auto !important;
+            }
+            #printArea .print-qr-label {
+                font-size: 7.5px !important;
+                margin-top: 4px !important;
+            }
+
+            /* Info Siswa Cetak */
+            #printArea .print-info-col {
+                flex: 1 1 0% !important;
+                gap: 5px !important;
+            }
+            #printArea .print-info-col > div {
+                padding: 6px 9px !important;
+                border-radius: 8px !important;
+            }
+
+            /* Footer Kartu Cetak */
+            #printArea .print-footer {
+                padding: 6px 14px !important;
+                font-size: 8.5px !important;
+                background-color: #f8fafc !important;
             }
         }
     </style>

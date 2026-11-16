@@ -170,33 +170,24 @@
             </button>
         </form>
 
-        <!-- Akun Uji Coba Cepat (Demo / Sidang Skripsi) -->
+        <!-- Bantuan Akses & Informasi Login Resmi -->
         <div class="mt-6 pt-5 border-t border-slate-100">
-            <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase text-center mb-2.5">
-                Akun Demo Pengujian (1-Klik Isi)
-            </p>
-            <div class="grid grid-cols-3 gap-2 text-xs">
-                <button type="button" onclick="autofill('admin')" 
-                        class="p-2 rounded-xl bg-slate-50 hover:bg-sky-50 border border-slate-200/80 hover:border-sky-300 transition-all text-center group">
-                    <span class="block text-sm mb-0.5">👑</span>
-                    <span class="block font-bold text-slate-700 group-hover:text-sky-700">Admin</span>
-                </button>
-                <button type="button" onclick="autofill('guru')" 
-                        class="p-2 rounded-xl bg-slate-50 hover:bg-sky-50 border border-slate-200/80 hover:border-sky-300 transition-all text-center group">
-                    <span class="block text-sm mb-0.5">👨‍🏫</span>
-                    <span class="block font-bold text-slate-700 group-hover:text-sky-700">Guru</span>
-                </button>
-                <button type="button" onclick="autofill('siswa')" 
-                        class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/80 hover:border-emerald-300 transition-all text-center group">
-                    <span class="block text-sm mb-0.5">🎓</span>
-                    <span class="block font-bold text-slate-700 group-hover:text-emerald-700">Siswa</span>
-                </button>
+            <div class="bg-slate-50 rounded-xl p-3 border border-slate-200/80 text-xs text-slate-600">
+                <div class="flex items-center gap-1.5 font-bold text-slate-800 mb-1">
+                    <svg class="w-3.5 h-3.5 text-sky-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Pusat Bantuan Autentikasi</span>
+                </div>
+                <p class="text-[11px] text-slate-500 leading-relaxed">
+                    Gunakan kredensial resmi sekolah yang telah terdaftar. Apabila Anda lupa kata sandi atau mengalami kendala akses akun, silakan hubungi <strong class="text-slate-700">Administrator IT SMKN 3 Bengkalis</strong>.
+                </p>
             </div>
         </div>
 
     </div>
 
-    <!-- Script Switching Tab Role & Autofill -->
+    <!-- Script Switching Tab Role -->
     <script>
         function switchRole(role) {
             const roleInput = document.getElementById('roleInput');
@@ -221,7 +212,7 @@
             } else if (role === 'guru') {
                 tabGuru.className = "flex-1 py-2 px-3 rounded-xl font-bold bg-white text-sky-700 shadow-sm transition-all duration-150 text-center flex items-center justify-center gap-1.5";
                 inputLabel.innerText = "NIP (18 Digit) atau Email Guru";
-                loginIdInput.placeholder = "198501012010011002 atau ahmad.daroini@smkn3bengkalis.sch.id";
+                loginIdInput.placeholder = "198501012010011002 atau guru@smkn3bengkalis.sch.id";
             } else if (role === 'siswa') {
                 tabSiswa.className = "flex-1 py-2 px-3 rounded-xl font-bold bg-white text-emerald-700 shadow-sm transition-all duration-150 text-center flex items-center justify-center gap-1.5";
                 inputLabel.innerText = "NISN Siswa (10 Digit)";
@@ -241,23 +232,6 @@
                 toggleText.innerText = 'Tampilkan';
             }
         }
-
-        // 1-Klik Isi Otomatis untuk Mempermudah Pengujian & Sidang
-        function autofill(role) {
-            switchRole(role);
-            const loginIdInput = document.getElementById('loginIdInput');
-            const passwordInput = document.getElementById('passwordInput');
-
-            if (role === 'admin') {
-                loginIdInput.value = 'admin@smkn3bengkalis.sch.id';
-                passwordInput.value = 'password123';
-            } else if (role === 'guru') {
-                loginIdInput.value = '198501012010011002'; // AHMAD DAROINI, S.Ag (Guru XI TKJ 1)
-                passwordInput.value = 'password123';
-            } else if (role === 'siswa') {
-                loginIdInput.value = '0109401780'; // AHMAD REZKY (Siswa XI TKJ 1)
-                passwordInput.value = 'siswa123';
-            }
         }
 
         // Set initial tab from old('role')

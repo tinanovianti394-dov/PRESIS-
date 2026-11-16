@@ -45,7 +45,7 @@
     </style>
 </head>
 @php
-    // Konfigurasi warna berdasarkan role
+    // Konfigurasi warna & ikon berdasarkan role
     $roleConfig = match($role) {
         'admin' => [
             'accent'     => 'brand',
@@ -54,9 +54,8 @@
             'textAccent' => 'text-brand-600',
             'badgeBg'    => 'bg-brand-500',
             'icon'       => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>',
-            'demoId'     => 'admin@smkn3bengkalis.sch.id',
-            'demoPwd'    => 'password123',
-            'demoLabel'  => 'Admin Demo',
+            'helpTitle'  => 'Pusat Bantuan Administrator',
+            'helpDesc'   => 'Akses terbatas untuk Pengelola Sistem & Tim IT Sekolah. Jika mengalami kendala otentikasi, periksa koneksi server atau hubungi Kepala Sekolah.',
         ],
         'guru' => [
             'accent'     => 'brand',
@@ -65,9 +64,8 @@
             'textAccent' => 'text-brand-600',
             'badgeBg'    => 'bg-brand-500',
             'icon'       => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>',
-            'demoId'     => '198501012010011002',
-            'demoPwd'    => 'password123',
-            'demoLabel'  => 'Guru Demo (Ahmad Daroini)',
+            'helpTitle'  => 'Panduan Akses Guru / Pendidik',
+            'helpDesc'   => 'Gunakan 18 digit NIP atau email dinas Anda yang terdaftar pada sistem kurikulum SMKN 3 Bengkalis. Reset password dapat diajukan ke Administrator.',
         ],
         'siswa' => [
             'accent'     => 'emerald',
@@ -76,9 +74,8 @@
             'textAccent' => 'text-emerald-600',
             'badgeBg'    => 'bg-emerald-500',
             'icon'       => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>',
-            'demoId'     => '0109401780',
-            'demoPwd'    => 'siswa123',
-            'demoLabel'  => 'Siswa Demo (Ahmad Rezky)',
+            'helpTitle'  => 'Informasi Login Peserta Didik',
+            'helpDesc'   => 'Masukkan 10 digit NISN resmi Anda. Jika belum menerima kata sandi akun presensi atau kartu hilang, silakan lapor kepada Wali Kelas.',
         ],
         default => [
             'accent'     => 'brand',
@@ -87,9 +84,8 @@
             'textAccent' => 'text-brand-600',
             'badgeBg'    => 'bg-brand-500',
             'icon'       => '',
-            'demoId'     => '',
-            'demoPwd'    => '',
-            'demoLabel'  => '',
+            'helpTitle'  => 'Bantuan Pengguna',
+            'helpDesc'   => 'Silakan hubungi pihak sekolah jika membutuhkan bantuan.',
         ],
     };
 @endphp
@@ -213,20 +209,21 @@
                     </button>
                 </form>
 
-                {{-- Akun Demo (1-Klik) --}}
+                {{-- Informasi & Layanan Bantuan Sekolah --}}
                 <div class="mt-6 pt-5 border-t border-slate-100">
-                    <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase text-center mb-3">
-                        Akun Demo Pengujian (1-Klik Isi)
-                    </p>
-                    <button type="button" onclick="autofillDemo()"
-                            class="w-full p-3 rounded-xl bg-slate-50 hover:bg-brand-50 border border-slate-200/80 hover:border-brand-300 transition-all text-center group">
-                        <span class="block text-xs font-bold text-slate-700 group-hover:text-brand-700">
-                            {{ $roleConfig['demoLabel'] }}
-                        </span>
-                        <span class="block text-[10px] font-mono text-slate-400 mt-0.5">
-                            {{ $roleConfig['demoId'] }}
-                        </span>
-                    </button>
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-lg {{ $roleConfig['bgLight'] }} {{ $roleConfig['textAccent'] }} flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1 text-xs">
+                            <h4 class="font-bold text-slate-800">{{ $roleConfig['helpTitle'] }}</h4>
+                            <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                                {{ $roleConfig['helpDesc'] }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -250,12 +247,6 @@
                 pwd.type = 'password';
                 txt.innerText = 'Tampilkan';
             }
-        }
-
-        // Autofill demo credentials
-        function autofillDemo() {
-            document.getElementById('usernameInput').value = @json($roleConfig['demoId']);
-            document.getElementById('passwordInput').value = @json($roleConfig['demoPwd']);
         }
 
         // Anti BFCache 419
