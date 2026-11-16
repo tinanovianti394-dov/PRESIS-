@@ -57,13 +57,21 @@ class DashboardController extends Controller
             ? round(($hadirBulan / $hariKerja) * 100, 1)
             : 0;
 
-        // 10 riwayat absensi terakhir
+        // 5 riwayat absensi terakhir untuk portal ringkas
         $riwayatAbsensi = Absensi::where('nisn', $siswa->nisn)
             ->latest('waktu_scan')
-            ->take(10)
+            ->take(5)
             ->get();
 
-        return view('siswa.dashboard', compact(
+        // 1. Generate payload data siswa berstandar AES-128-CBC (Tipe 'card' - Statis Permanen)
+        $encryptedPayload = QrCryptoService::generateSiswaQrPayload($siswa, 'card');
+
+        // 2. Generate visualisasi QR Code SVG tajam tanpa margin untuk kartu digital portal
+        $qrCodeSvg = QrCode::size(190)
+            ->margin(0)
+            ->generate($encryptedPayload);
+
+        return view('siswa.portal', compact(
             'siswa',
             'absensiHariIni',
             'hadirBulan',
@@ -73,6 +81,8 @@ class DashboardController extends Controller
             'persenHadir',
             'hariKerja',
             'riwayatAbsensi',
+            'encryptedPayload',
+            'qrCodeSvg'
         ));
     }
 
@@ -96,24 +106,20 @@ class DashboardController extends Controller
     }
 
     /**
-     * Halaman Kartu QR Code Siswa Terenkripsi AES-128-CBC.
+     * Halaman Kartu QR Code Siswa Terenkripsi AES-128-CBC (Murni Read-Only Statis).
      */
     public function showQrCode()
     {
         $siswa = Auth::guard('siswa')->user();
 
-        // 1. Enkripsi payload data siswa menggunakan OpenSSL AES-128-CBC (tipe: dynamic dengan batas kadaluarsa)
-        $encryptedPayload = QrCryptoService::generateSiswaQrPayload($siswa, 'dynamic');
+        // Gunakan tipe 'card' (permanen, tanpa expiry) selaras dengan ID card fisik
+        $encryptedPayload = QrCryptoService::generateSiswaQrPayload($siswa, 'card');
 
-        // 2. Generate gambar QR Code dalam format SVG menggunakan Simple QrCode
-        $qrCodeSvg = QrCode::size(240)
-            ->margin(1)
+        $qrCodeSvg = QrCode::size(200)
+            ->margin(0)
             ->generate($encryptedPayload);
 
-        // 3. Ambil masa berlaku QR dari konfigurasi
-        $expirySeconds = QrCryptoService::getExpirySeconds();
-
-        return view('siswa.qrcode', compact('siswa', 'encryptedPayload', 'qrCodeSvg', 'expirySeconds'));
+        return view('siswa.qrcode', compact('siswa', 'encryptedPayload', 'qrCodeSvg'));
     }
 
     /**
