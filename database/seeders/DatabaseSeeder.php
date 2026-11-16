@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      * Seed database khusus sampel penelitian kelas XI TKJ 1.
      * Meliputi:
      * - 1 Akun Admin (Administrator PRESIS)
-     * - 15 Guru Pengampu Unik kelas XI TJKT 1 (dari file jadwal)
+     * - 15 Guru Pengampu Unik kelas XI TKJ 1 (dari file jadwal)
      * - 35 Siswa kelas XI TKJ 1 (dari file siswa_XI_TKJ_1.xlsx)
      */
     public function run(): void
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         );
 
         // ============================================================
-        // 2. Data 15 Guru Pengampu Unik (Jadwal Pelajaran XI TJKT 1)
+        // 2. Data 15 Guru Pengampu Unik (Jadwal Pelajaran XI TKJ 1)
         // Login menggunakan NIP (18-digit) atau Email
         // Password default: password123
         // ============================================================

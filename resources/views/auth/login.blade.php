@@ -232,7 +232,6 @@
                 toggleText.innerText = 'Tampilkan';
             }
         }
-        }
 
         // Set initial tab from old('role')
         document.addEventListener('DOMContentLoaded', () => {

@@ -230,7 +230,7 @@
 
         {{-- Footer --}}
         <p class="mt-6 text-xs text-slate-400 text-center">
-            © {{ date('Y') }} PRESIS — SMK Negeri 3 Bengkalis · Jurusan TJKT
+            © {{ date('Y') }} PRESIS — SMK Negeri 3 Bengkalis
         </p>
 
     </div>

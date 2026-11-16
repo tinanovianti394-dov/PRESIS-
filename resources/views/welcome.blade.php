@@ -98,7 +98,7 @@
         </h2>
 
         <p class="text-slate-600 text-sm sm:text-base max-w-2xl mt-4 leading-relaxed">
-            Platform presensi modern berbasis QR Code dinamis AES-128 dengan integrasi notifikasi WhatsApp Gateway otomatis dan rekapitulasi real-time untuk jurusan Teknik Jaringan Komputer dan Telekomunikasi.
+            Platform presensi modern berbasis QR Code terenkripsi AES-128 dengan integrasi notifikasi WhatsApp Gateway otomatis dan rekapitulasi real-time untuk SMK Negeri 3 Bengkalis.
         </p>
 
         <div class="mt-8 flex flex-col sm:flex-row gap-3">
@@ -148,7 +148,7 @@
 
     <!-- Footer -->
     <footer class="w-full border-t border-slate-200/80 bg-white/50 py-6 text-center text-xs text-slate-500">
-        <p>© {{ date('Y') }} PRESIS — SMK Negeri 3 Bengkalis. Jurusan Teknik Jaringan Komputer dan Telekomunikasi.</p>
+        <p>© {{ date('Y') }} PRESIS — SMK Negeri 3 Bengkalis</p>
     </footer>
 
 </body>
